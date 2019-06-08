@@ -1,0 +1,37 @@
+- if @list_is_mine
+  %h1= @list.title
+- else
+  %h1= "#{@list.title} (#{@list.user.nickname})"
+%p= markdown(@list.description)
+%p 
+  Last updated
+  = time_ago_in_words @list.updated_at
+  ago
+- if @list_pins.blank?
+  - if @list_is_mine
+    .create_something_prompt
+      = link_to "Create a pin!", new_pin_path
+  - else
+    .create_something_prompt
+      None
+- else
+  #pins.transitions-enabled
+    - @list_pins.each do |list_pin|
+      .box.panel.panel-default
+        .panel-header
+          .pin_image_in_list
+            - if ! list_pin.pin.image.blank?
+              = link_to (image_tag list_pin.pin.image.url()), list_pin.pin.url, :target => "_blank"
+        .panel-body
+          %h1= link_to list_pin.pin.title, list_pin.pin.url, :target => "_blank"
+          %p= markdown(list_pin.pin.description)
+        .panel-footer
+          .row
+            .col-md-12
+              = link_to "View pin", list_pin.pin
+              - if @list_is_mine
+                .btn-group
+                  = link_to "Edit", edit_pin_path(list_pin.pin), class: "btn btn-default"
+                  = link_to "Delete", pin_path(list_pin.pin), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-default"
+              - if @show_notes
+                = render :partial => 'list_pin_note', :locals => {:list_pin => list_pin}

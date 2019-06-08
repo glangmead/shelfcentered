@@ -1,0 +1,28 @@
+#pin_show.row
+  .col-md-8.col-md-offset-2
+    .panel.panel-default
+      - if @pin.image.exists?
+        .panel-heading.pin_image
+          = image_tag @pin.image.url(:medium)
+      .panel-body
+        %h1= @pin.title
+        %p.description= markdown(@pin.description)
+      .panel-footer
+        .row
+          Appears in: 
+          - @pin_lists.each_with_index do |list, index|
+            - pin_list_name = @pin_is_mine ? list.title : "#{list.title} (#{list.user.nickname})"
+            - if index != @pin_lists.size - 1
+              = succeed ", " do
+                = link_to pin_list_name, list_path(list)
+            - else
+              = link_to pin_list_name, list_path(list)
+          - if @pin_is_mine
+            .btn-group.pull-right
+              = link_to "Edit", edit_pin_path, class: "btn btn-default"
+              = link_to "Delete", pin_path, method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-default"
+        - if !@pin_is_mine
+          .row
+            .col-md-12
+              - if @pin.list_pins.length == 1
+                = render :partial => 'lists/list_pin_note', :locals => { :list_pin => @pin.list_pins[0] }

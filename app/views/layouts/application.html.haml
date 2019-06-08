@@ -1,0 +1,63 @@
+!!! 5
+%html
+%head
+  %title ShelfCentered
+  = stylesheet_link_tag    'application', media: 'all'
+  %meta{:name => "viewport", :content => "width=device-width, initial-scale=1"}
+  = javascript_include_tag 'application'
+  = csrf_meta_tags
+%body
+  %nav.navbar.navbar-default
+    .container
+      .navbar-brand= link_to "ShelfCentered", root_path
+      - if user_signed_in?
+        %ul.nav.navbar-nav.navbar-right
+          %li.dropdown
+            %button{:class => "btn btn-default dropdown-toggle", :id => "recentDropdown", :type => :button, "data-toggle" => :dropdown, "aria-expanded" => "true"}
+              Recent
+              %span.caret
+            %ul{:class => "dropdown-menu", :role => "menu", "aria-labelledby" => "recentDropdown"}
+              - unless @recent_paths.blank?
+                - (0..9).each do |i|
+                  - unless @recent_paths[i].blank?
+                    %li= link_to @recent_path_names[i], list_path(@recent_paths[i])
+              - else
+                %li None
+          %li
+            %button{:class => "btn btn-link", "data-toggle" => "modal", "data-target" => "#about"}
+              About          
+          %li= link_to "Lists", root_path
+          %li= link_to "Friends", friends_path
+          %li= link_to "New List", new_list_path
+          %li= link_to "New Pin", new_pin_path
+          - if current_user.avatar.exists?
+            %li= link_to "Account #{image_tag(current_user.avatar.url(:tiny))}".html_safe, edit_user_registration_path
+          - else
+            %li= link_to "Account", edit_user_registration_path
+          %li= link_to "Sign Out (#{current_user.nickname})", destroy_user_session_path, method: :delete
+      - else
+        %ul.nav.navbar-nav.navbar-right
+          %li= link_to "Sign Up", new_user_registration_path
+          %li= link_to "Sign In", new_user_session_path
+  %div{:class => "modal fade", :id => "about", :role => "dialog"}
+    .modal-dialog
+      .modal-content
+        .modal-header
+          %button{:class => "close", "data-dismiss" => "modal"}
+            %span
+              &times;
+          %h4.modal-title
+            About
+        .modal-body
+          %p
+            Welcome to ShelfCentered, version 4.
+          %p
+            Drag this to your bookmarks to create pins from another site: 
+            = link_to "Shelve it!", "javascript:(function()%20%7Bd=document,%20w=window,%20e=w.getSelection,%20k=d.getSelection,%20x=d.selection,%20s=(e?e():(k)?k():(x?x.createRange().text:0)),%20e=encodeURIComponent,%20document.location='http://shelfcentered.com/pins/new?url='+e(document.location)+'&title='+e(document.title)+'&selection='+e(s);%7D%20)();"
+        .modal-footer
+          Copyright© 2015 Greg Langmead. All Right Reserved.
+  .container
+    - flash.each do |name, msg|
+      = content_tag :div, msg, class: "alert alert-info"
+    = yield
+

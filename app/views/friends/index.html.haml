@@ -1,0 +1,49 @@
+%h1
+  Friends
+%ul
+  - if ! @friends.blank? && ! @friends.length.zero?
+    - @friends.each do |user|
+      %li
+        = link_to user.nickname, url_for(:controller => 'lists', :user_id => user.id)
+  - else
+    = "None"
+%h1
+  Invitations from you
+%ul
+  - if ! @i_invited.blank? && ! @i_invited.length.zero?
+    - @i_invited.each do |user|
+      %li
+        = user.nickname
+  - else
+    = "None"
+
+%h1
+  Invitations to you
+%ul
+  - if ! @was_invited.blank? && ! @was_invited.length.zero?
+    - @was_invited.each do |user|
+      %li
+        = user.nickname
+        = link_to "approve", url_for(:controller => 'friends', :action => 'approve', :other_id => user.id)
+  - else
+    = "None"
+
+%h1
+  Find a friend to invite!
+= form_tag(url_for(controller: "friends", action: "search"), method: "get") do
+  = text_field_tag("query")
+  = submit_tag "Search"
+
+- if ! @found.blank? && ! @found.length.zero?
+  - @found.zip(@states).each do |user, state|
+    %li
+      - if state == 1
+        = user.nickname
+        = link_to "approve", url_for(:controller => 'friends', :action => 'approve', :other_id => user.id)
+      - if state == 2
+        = "#{user.nickname} (waiting for their approval)"
+      - if state == 3
+        = "#{user.nickname} (already friends)"
+      - if state == 0
+        = user.nickname
+        = link_to "invite", url_for(:controller => 'friends', :action => 'invite', :other_id => user.id)

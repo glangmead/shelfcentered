@@ -1,0 +1,57 @@
+.col-md-6.col-md-offset-1
+  %h2 Pin info
+  #current_image
+    - if @pin.image.exists?
+      = image_tag @pin.image.url(:medium)
+  = simple_form_for @pin, html: { multipart: true } do |f|
+    - if @pin.errors.any?
+      #errors
+        %h2 
+        = pluralize(@pin.errors.count, "error")
+        prevented this pin from being saved
+        %ul
+          - @pin.errors.full_messages.each do |msg|
+            %li= msg
+  
+    .form-group
+      = f.association :lists, :collection => @current_user.lists, input_html: { class: 'form-control' }, required: true
+  
+    .form-group
+      - if @pin_title.blank?
+        = f.input :title, required: true, input_html: { class: 'form-control' }
+      - else
+        = f.input :title, required: true, input_html: { class: 'form-control', :value => @pin_title }
+  
+    .form-group
+      - if @pin_url.blank?
+        = f.input :url, :id => "pin_url", input_html: { class: 'form-control' }
+      - else
+        = f.input :url, :id => "pin_url", input_html: { class: 'form-control', :value => @pin_url }
+    .form-group
+      = f.input :image_remote_url, input_html: { class: 'form-control', :id => "image_url_slave" }
+    .form-group
+      = f.input :description, input_html: { class: 'form-control' }
+      
+    = f.button :submit, class: "btn btn-primary", data: { disable_with: "Waiting..." }
+
+
+.col-md-3
+  .container
+    %h2 Pin Image
+    %p Browse the images from your link. Click one to assign it.
+    = simple_form_for @pin, remote: true, :url => "/pins/load_images", :method => :get do |f|
+      = f.input_field :url, :as => :hidden, :id => "pin_url_image_form", input_html: { :value => "http://www.google.com" }
+      = f.button :submit, "Go", class: "btn btn-primary", :id => "fetch_images_button", data: { disable_with: "Waiting..." }
+    %ul#image_list
+
+:javascript
+  $('#image_list').click( function(event) {
+    element = event.target;
+    if (element instanceof HTMLImageElement) {
+      $('#image_url_slave').val(element.src);
+      $('#current_image').html("<img src=\"" + element.src + "\" width=\"300\" />");
+    }
+  });
+  $('#fetch_images_button').click( function(event) {
+    $('#pin_url_image_form').val($('#pin_url').val());
+  });

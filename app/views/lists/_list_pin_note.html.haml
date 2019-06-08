@@ -1,0 +1,33 @@
+.notes
+  - list_pin.notes.each do |note|
+    .panel.panel-default
+      .panel-heading
+        - if note.kind == 2
+          .bg-success
+            %b= "#{note.user.nickname}:"
+            = note.kind == 1 ? "Note" : "Claim"
+            = "(#{time_ago_in_words(note.created_at)} ago)"
+        - else
+          .bg-info
+            %b= "#{note.user.nickname}:"
+            = note.kind == 1 ? "Note" : "Claim"
+            = "(#{time_ago_in_words(note.created_at)} ago)"
+      .panel-body
+        = markdown(note.body)
+      .panel-footer
+        - if note.user_id == @current_user.id
+          = link_to "Delete", note_path(note), method: :delete, data: {confirm: 'Are you sure?'}, :class => "btn btn-primary"
+      
+  .panel.panel-default
+    .panel-heading
+      %b New note
+    .panel-body
+      - note = Note.new
+      .form-inline.new_note_form
+        = simple_form_for note do |f|
+          %p
+            = f.input_field :body, label: false
+          %p
+            = f.input :kind, collection: [["Note", 1], ["Claim", 2]], label: false, default: "Note"
+            = f.input_field :list_pin_id, :as => :hidden, :value => "#{list_pin.id}"
+            = f.button :submit, "Post", class: "btn btn-primary"

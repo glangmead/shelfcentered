@@ -1,0 +1,19 @@
+= simple_form_for @list, html: { multipart: true } do |f|
+	- if @list.errors.any?
+		#errors
+			%h2 
+			= pluralize(@list.errors.count, "error")
+			prevented this list from being saved
+			%ul
+				- @list.errors.full_messages.each do |msg|
+					%li= msg
+	.form-group
+		= f.input :title, input_html: { class: 'form-control' }
+
+	.form-group
+		= f.input :description, input_html: { class: 'form-control' }
+		
+	.form-group
+		= f.input :visibility, default: "Private", collection: [["Private", 0], ["Friends", 1], ["Public", 2]], input_html: { class: 'form-control' }
+		
+	= f.button :submit, class: "btn btn-primary"

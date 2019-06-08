@@ -1,0 +1,19 @@
+- if @list_user_is_me
+  %h1 Your lists
+- else
+  %h1= "#{@list_user.nickname}'s lists"
+- if @lists.blank?
+  - if @list_user_is_me
+    .create_something_prompt
+      = link_to "Create a list to store pins!", new_list_path
+  - else
+    .create_something_prompt
+      None
+- else
+  - @lists.each do |list|
+    #lists
+      .list.box
+        %span.list_name= link_to list.title, list
+        - if @list_user_is_me
+          %span.list_controls= link_to "Edit", edit_list_path(list)
+          %span.list_controls= link_to "Delete", list_path(list), method: :delete, data: { confirm: "Are you sure?" }
