@@ -3,7 +3,7 @@
     .panel.panel-default
       - if @pin.image.exists?
         .panel-heading.pin_image
-          = image_tag @pin.image.url(:medium)
+          = image_tag @pin.image_remote_url()
       .panel-body
         %h1= @pin.title
         %p.description= markdown(@pin.description)

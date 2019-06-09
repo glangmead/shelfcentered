@@ -21,7 +21,7 @@
         .panel-header
           .pin_image_in_list
             - if ! list_pin.pin.image.blank?
-              = link_to (image_tag list_pin.pin.image.url()), list_pin.pin.url, :target => "_blank"
+              = link_to (image_tag list_pin.pin.image_remote_url()), list_pin.pin.url, :target => "_blank"
         .panel-body
           %h1= link_to list_pin.pin.title, list_pin.pin.url, :target => "_blank"
           %p= markdown(list_pin.pin.description)
