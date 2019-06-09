@@ -3,7 +3,7 @@
 - else
   %h1= "#{@list.title} (#{@list.user.nickname})"
 %p= markdown(@list.description)
-%p 
+%p
   Last updated
   = time_ago_in_words @list.updated_at
   ago

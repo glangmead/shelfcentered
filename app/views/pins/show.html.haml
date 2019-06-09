@@ -9,7 +9,7 @@
         %p.description= markdown(@pin.description)
       .panel-footer
         .row
-          Appears in: 
+          Appears in:
           - @pin_lists.each_with_index do |list, index|
             - pin_list_name = @pin_is_mine ? list.title : "#{list.title} (#{list.user.nickname})"
             - if index != @pin_lists.size - 1
