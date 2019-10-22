@@ -74,7 +74,8 @@ GEM
     grabbit (1.0.0)
       httparty
       nokogiri
-    haml (4.0.7)
+    haml (5.0.0)
+      temple (>= 0.8.0)
       tilt
     httparty (0.17.0)
       mime-types (~> 3.0)
@@ -193,12 +194,13 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    temple (0.8.2)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
     thor (0.20.3)
     thread_safe (0.3.6)
-    tilt (2.0.9)
+    tilt (2.0.10)
     turbolinks (5.2.0)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -224,7 +226,7 @@ DEPENDENCIES
   coffee-rails (~> 4.1.0)
   devise (~> 4.7.1)
   grabbit
-  haml (~> 4.0.6)
+  haml (~> 5.0.0)
   jbuilder (~> 2.0)
   jquery-rails
   masonry-rails (~> 0.2.4)
