@@ -39,7 +39,7 @@ gem 'amistad', '~> 0.10.2'
 gem 'grabbit'
 gem 'papercrop', '~> 0.2.0'
 gem 'retina_rails', '~> 2.0.0'
-gem 'redcarpet', '~> 2.3.0'
+gem 'redcarpet', '~> 3.5.1'
 gem 'open_uri_redirections'
 
 gem 'puma'
